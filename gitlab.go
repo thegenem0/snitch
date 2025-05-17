@@ -33,7 +33,7 @@ func (creds GitlabCredentials) query(method, url string) (map[string]interface{}
 func (creds GitlabCredentials) getIssue(repo string, todo Todo) (map[string]interface{}, error) {
 	json, err := creds.query(
 		"GET",
-		// FIXME(#156): possible GitLab API injection attack
+		// FIXME(#156)[#4]: possible GitLab API injection attack
 		"https://"+creds.Host+"/api/v4/projects/"+url.QueryEscape(repo)+"/issues/"+(*todo.ID)[1:]) // self-hosted
 
 	if err != nil {
