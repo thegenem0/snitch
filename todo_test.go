@@ -59,7 +59,7 @@ func TestTodo_RemoveShouldWork(t *testing.T) {
 
 import "fmt"
 
-// TODO(#8): Rewrite this in rust
+// TODO(#8)[#9]: Rewrite this in rust
 //   No really.
 func main() {
 	fmt.Println("Hello world")
