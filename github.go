@@ -35,7 +35,7 @@ func (creds GithubCredentials) query(method, url string, jsonBody map[string]int
 func (creds GithubCredentials) getIssue(repo string, todo Todo) (map[string]interface{}, error) {
 	json, err := creds.query(
 		"GET",
-		// FIXME(#59): possible GitHub API injection attack
+		// FIXME(#59)[#3]: possible GitHub API injection attack
 		"https://api.github.com/repos/"+repo+"/issues/"+(*todo.ID)[1:],
 		nil)
 
