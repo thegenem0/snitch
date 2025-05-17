@@ -2,6 +2,15 @@
 [![Build Status](https://travis-ci.org/tsoding/snitch.svg?branch=master)](https://travis-ci.org/tsoding/snitch)
 [![Build Status](https://github.com/tsoding/snitch/workflows/Go/badge.svg)](https://github.com/tsoding/snitch/actions?query=workflow%3AGo)
 
+# NOTE
+
+This fork adds support for username'd TODOs.
+If you decide to use this fork, make sure to stick to a TODO convention,
+
+e.g. only use `TODO(#issue_number)` or only use `TODO(git_user)[#issue_number]`
+
+This can be enabled by setting `use_usernames: true` in your `.snitch.yaml`
+
 # Snitch
 
 A simple tool that collects TODOs in the source code and reports them as GitHub issues.
@@ -31,8 +40,9 @@ After that you are supposed to push the new reported TODOs yourself.
 Regular expression: `^(.*)TODO(O*): (.*)$` [Play](https://regex101.com/r/u5lkxf/2)
 
 Capture Groups:
+
 - Group 1: **Prefix**. Used only to precisly recover the text of the line where the TODO is originally located.
-- Group 2: **Urgency Suffix**. Used to indicate the urgency of the TODO. The higher the amount of `O`-s, the more urgent the TODO is. (See [Urgency](#Urgency) for more info)
+- Group 2: **Urgency Suffix**. Used to indicate the urgency of the TODO. The higher the amount of `O`-s, the more urgent the TODO is. (See [Urgency](#urgency) for more info)
 - Group 3: **Suffix**. Used as the title of the issue.
 
 ### Reported TODO
@@ -48,8 +58,9 @@ Capture Groups:
 Regular expression: `^(.*)TODO(O*)\((.*)\): (.*)$` [Play](https://regex101.com/r/5U6rjS/1)
 
 Capture Groups:
+
 - Group 1: **Prefix**. Used only to precisly recover the text of the line where the TODO is originally located.
-- Group 2: **Urgency Suffix**. Used to indicate the urgency of the TODO. The higher the amount of `O`-s, the more urgent the TODO is. (See [Urgency](#Urgency) for more info)
+- Group 2: **Urgency Suffix**. Used to indicate the urgency of the TODO. The higher the amount of `O`-s, the more urgent the TODO is. (See [Urgency](#urgency) for more info)
 - Group 3: **ID**. The number of the Issue.
 - Group 4: **Suffix**. Used as the title of the issue.
 
@@ -86,6 +97,7 @@ However, you can specify which remote Snitch uses on a per repo basis.
 Remotes are defined in `.snitch.yaml` under **remote**.
 
 #### Example
+
 <pre>
 title:
   transforms:
@@ -99,36 +111,42 @@ keywords:
 </pre>
 
 ### Commandline
+
 Remotes can be dynamically specified when Snitch is called.
 
 This will overide a previously defined remote in `.snitch.yaml`
 
 #### Example
+
 ```
-$ ./snitch report --remote <remote>
+./snitch report --remote <remote>
 ```
 
 ## Installation
 
 ```console
-$ go get github.com/tsoding/snitch
+go get github.com/tsoding/snitch
 ```
 
 ## Credentials
 
 ### GitHub Credentials
-Snitch obtains GitHub credentials from two places:  (default) environment variable or file.
+
+Snitch obtains GitHub credentials from two places: (default) environment variable or file.
 
 #### Environment Variable
+
 `export GITHUB_PERSONAL_TOKEN = <personal-token>` which can be added to `.bashrc`
 
 #### File
 
 Config file can be stored in one of the following directories:
+
 - `$HOME/.config/snitch/github.ini`
 - `$HOME/.snitch/github.ini`
 
 Format:
+
 ```ini
 [github]
 personal_token = <personal-token>
@@ -151,6 +169,7 @@ Each of the credentials are to be separated by `,` and in format: `<host>:<perso
 #### File
 
 Config file can be stored in one of the following directories:
+
 - `$HOME/.config/snitch/gitlab.ini`
 - `$HOME/.snitch/gitlab.ini`
 
@@ -171,7 +190,7 @@ Checkout [GitLab Help][personal-token-gitlab] on how to get the Personal Access 
 For usage help just run `snitch` without any arguments:
 
 ```console
-$ ./snitch
+./snitch
 ```
 
 ## .snitch.yaml
@@ -209,29 +228,29 @@ Titles. Like `*/` at the end of C comments.
 ## Development
 
 ```console
-$ export GOPATH=$PWD
-$ go get .
-$ go build .
+export GOPATH=$PWD
+go get .
+go build .
 ```
 
 ### Run tests
 
 ```console
-$ go test ./...
+go test ./...
 ```
 
 For a more detailed output:
 
 ```console
-$ go test -v -cover ./...
+go test -v -cover ./...
 ```
 
 ## Support
 
 You can support my work via
 
-- Twitch channel: https://www.twitch.tv/subs/tsoding
-- Patreon: https://www.patreon.com/tsoding
+- Twitch channel: <https://www.twitch.tv/subs/tsoding>
+- Patreon: <https://www.patreon.com/tsoding>
 
 [personal-token]: https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
 [personal-token-gitlab]: https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html
