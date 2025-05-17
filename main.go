@@ -173,7 +173,7 @@ func purgeSubcommand(project Project, creds IssueAPI, repo string, alwaysYes boo
 }
 
 func usage() {
-	// FIXME(#9): implement a map for options instead of println'ing them all there
+	// FIXME(#9)[#5]: implement a map for options instead of println'ing them all there
 	fmt.Printf("snitch [opt]\n" +
 		"\tlist [--unreported] [--reported] [--y] [--remote]: lists all todos of a dir recursively\n" +
 		"\treport [--prepend-body <issue-body>] [--y] [--remote]: reports all todos of a dir recursively \n\t\tas GitHub issues\n" +
