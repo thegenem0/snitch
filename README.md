@@ -40,7 +40,7 @@ Capture Groups:
 #### Example
 
 ```
-// TODO(#42): rewrite this in Rust
+// TODO(#42)[#1]: rewrite this in Rust
 ```
 
 #### Parsing
