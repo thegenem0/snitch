@@ -14,6 +14,7 @@ type Todo struct {
 	Suffix        string
 	Keyword       string
 	Urgency       int
+	Username      string
 	ID            *string
 	Filename      string
 	Line          int
@@ -28,29 +29,71 @@ type Todo struct {
 func (todo Todo) LogString() string {
 	urgencySuffix := strings.Repeat(string(todo.Keyword[len(todo.Keyword)-1]), todo.Urgency)
 
-	if todo.ID == nil {
-		return fmt.Sprintf("%s:%d: %s%s%s: %s",
+	if todo.Username != "" {
+		if todo.ID == nil {
+			// Format: file:line: KEYWORD(user): message
+			return fmt.Sprintf("%s:%d: %s%s%s(%s): %s",
+				todo.Filename, todo.Line,
+				todo.Prefix, todo.Keyword, urgencySuffix,
+				todo.Username,
+				todo.Suffix)
+		}
+
+		// Format: file:line: KEYWORD(user)[#ID]: message
+		return fmt.Sprintf("%s:%d: %s%s%s(%s)[%s]: %s",
 			todo.Filename, todo.Line,
 			todo.Prefix, todo.Keyword, urgencySuffix,
+			todo.Username,
+			*todo.ID,
+			todo.Suffix)
+	} else {
+		if todo.ID == nil {
+			// Format: file:line: KEYWORD: message
+			return fmt.Sprintf("%s:%d: %s%s%s: %s",
+				todo.Filename, todo.Line,
+				todo.Prefix, todo.Keyword, urgencySuffix,
+				todo.Suffix)
+		}
+
+		// Format: file:line: KEYWORD(#ID): message
+		return fmt.Sprintf("%s:%d: %s%s%s(%s): %s",
+			todo.Filename, todo.Line,
+			todo.Prefix, todo.Keyword, urgencySuffix,
+			*todo.ID,
 			todo.Suffix)
 	}
-
-	return fmt.Sprintf("%s:%d: %s%s%s(%s): %s",
-		todo.Filename, todo.Line,
-		todo.Prefix, todo.Keyword, urgencySuffix,
-		*todo.ID, todo.Suffix)
 }
 
 func (todo Todo) String() string {
 	urgencySuffix := strings.Repeat(string(todo.Keyword[len(todo.Keyword)-1]), todo.Urgency)
-	if todo.ID == nil {
-		return fmt.Sprintf("%s%s%s: %s",
-			todo.Prefix, todo.Keyword, urgencySuffix, todo.Suffix)
-	}
 
-	return fmt.Sprintf("%s%s%s(%s): %s",
-		todo.Prefix, todo.Keyword, urgencySuffix, *todo.ID,
-		todo.Suffix)
+	if todo.Username != "" {
+		if todo.ID == nil {
+			// Format: KEYWORD(user): message
+			return fmt.Sprintf("%s%s%s(%s): %s",
+				todo.Prefix, todo.Keyword, urgencySuffix,
+				todo.Username,
+				todo.Suffix)
+		}
+
+		// Format: KEYWORD(user)[#ID]: message
+		return fmt.Sprintf("%s%s%s(%s)[%s]: %s",
+			todo.Prefix, todo.Keyword, urgencySuffix,
+			todo.Username,
+			*todo.ID,
+			todo.Suffix)
+	} else {
+		if todo.ID == nil {
+			// Format: KEYWORD: message
+			return fmt.Sprintf("%s%s%s: %s",
+				todo.Prefix, todo.Keyword, urgencySuffix, todo.Suffix)
+		}
+
+		// Format: KEYWORD(#ID): message
+		return fmt.Sprintf("%s%s%s(%s): %s",
+			todo.Prefix, todo.Keyword, urgencySuffix, *todo.ID,
+			todo.Suffix)
+	}
 }
 
 // ParseBodyLine strips off the prefix of a body line of the TODO
@@ -148,7 +191,7 @@ func (todo Todo) Remove() error {
 
 // GitCommit commits the Todo location to the git repo
 func (todo Todo) GitCommit(prefix string) error {
-	// FIXME(#96): there is no way to check that Todo is unreported at compile time
+	// FIXME(#96)[#7]: there is no way to check that Todo is unreported at compile time
 	if todo.ID == nil {
 		panic(fmt.Sprintf("Trying to commit an unreported TODO! %v", todo))
 	}
